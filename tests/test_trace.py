@@ -1,11 +1,8 @@
-import mock
 from mock import patch
 import pytest
 from collections import namedtuple
 
 from trace_util.traceroute import Traceroute
-from socket import error
-
 
 @pytest.fixture
 def set_up():
