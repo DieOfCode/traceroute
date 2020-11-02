@@ -84,7 +84,6 @@ def main(dst, dstPort = 80, src = '127.0.0.1', srcPort = None, timeout = 1):
         if recvTcpSocket.getResponseAddress():
             address = recvTcpSocket.getResponseAddress()
             delta_t = recvTcpSocket.getTimeCost()
-            type = socket.IPPROTO_TCP
         elif recvIcmpSocket.getResponseAddress():
             address = recvIcmpSocket.getResponseAddress()
             delta_t = recvIcmpSocket.getTimeCost()
