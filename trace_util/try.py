@@ -88,7 +88,7 @@ def main(dst, dstPort = 80, src = '127.0.0.1', srcPort = None, timeout = 1):
         elif recvIcmpSocket.getResponseAddress():
             address = recvIcmpSocket.getResponseAddress()
             delta_t = recvIcmpSocket.getTimeCost()
-
+            type = socket.IPPROTO_ICMP
         else:
             address = None
 
