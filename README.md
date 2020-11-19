@@ -10,11 +10,11 @@ Installing
     
 Start
 ----
-    sudo python3 main.py --host <host> --port <port> 
+    sudo python3 -m trace <host> --port <port> 
   
 Example
 ----
-    sudo python3 main.py --host yandex.ru 
+    sudo python3 -m trace yandex.ru 
 
     1:router.asus.com (192.169.0.1) 8ms router.asus.com (192.169.0.1) 5ms router.asus.com (192.169.0.1) 6ms , TYPE:11, CODE:0
     2: (172.23.27.1) 6ms  (172.23.27.1) 6ms  (172.23.27.1) 5ms , TYPE:11, CODE:0
@@ -34,7 +34,18 @@ Command
 | Command       | info                | 
 | :------------- |:------------------:|
 | -p --port     | Specify the port   | 
-|  --host     | Specify the host|   
+|  --host       | Specify the host|   
 | -f --first_ttl|number of ttl at first start|
-| -m --max_hops|number of maximum ttl |
+| -m --max_hops |number of maximum ttl |
+|--time_for_receive|Sets the amount of time between requests |
+|--number_of_request|Sets the amount of request |
+|--tcp|Sets the amount of request |
+|--size|Sets the size packet |
+|--payload|Sets the payload |
+|--sendTime|Sets the payload |
+|--seq|Sets the seq num |
+|--interval|interval between requests |
+
+
+
  
