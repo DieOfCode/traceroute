@@ -1,6 +1,6 @@
 import argparse
 
-from trace.traceroute import Traceroute
+from trace.traceroute import Traceroute, TcpTraceroute
 
 
 def main():
@@ -23,6 +23,8 @@ def main():
                         help="Sets the amount of request")
     parser.add_argument("--tcp", dest="tcp", action="store_true",
                         help="Sets the amount of request")
+    parser.add_argument("--v6", dest="ipv6", action="store_true",
+                        help="Sets the amount of request")
     parser.add_argument("--size", type=int, dest="size", default=40,
                         help="Sets the size packet")
     parser.add_argument("--payload", type=str, dest="payload", default="",
@@ -37,19 +39,33 @@ def main():
                         help="interval between requests")
 
     args = parser.parse_args()
-    traceroute_util = Traceroute(max_hops=args.max_hops,
-                                 port=args.port,
-                                 host=args.host,
-                                 number_of_request=args.number_of_request,
-                                 time_for_receive=args.time_for_receive,
-                                 ttl=args.first_ttl,
-                                 tcp=args.tcp, packet_size=args.size,
-                                 payload=args.payload,
-                                 timeout_for_send=args.time_for_send,
-                                 seq_number=args.seq,
-                                 interval_per_request=args.interval)
-    for i in traceroute_util.traceroute():
-        print(i.trace_result)
+    if args.tcp:
+        traceroute_util = TcpTraceroute(max_hops=args.max_hops,
+                                        port=args.port,
+                                        host=args.host,
+                                        number_of_request=args.
+                                        number_of_request,
+                                        time_for_receive=args.time_for_receive,
+                                        ttl=args.first_ttl,
+                                        ip_v6=False, packet_size=args.size,
+                                        payload=args.payload,
+                                        timeout_for_send=args.time_for_send,
+                                        seq_number=args.seq,
+                                        interval_per_request=args.interval)
+    else:
+        traceroute_util = Traceroute(max_hops=args.max_hops,
+                                     port=args.port,
+                                     host=args.host,
+                                     number_of_request=args.number_of_request,
+                                     time_for_receive=args.time_for_receive,
+                                     ttl=args.first_ttl,
+                                     ip_v6=args.ipv6, packet_size=args.size,
+                                     payload=args.payload,
+                                     timeout_for_send=args.time_for_send,
+                                     seq_number=args.seq,
+                                     interval_per_request=args.interval)
+    for trace in traceroute_util.traceroute():
+        print(trace)
 
 
 if __name__ == "__main__":

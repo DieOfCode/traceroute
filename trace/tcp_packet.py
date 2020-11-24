@@ -3,7 +3,7 @@ import socket
 import struct
 
 
-class TCP_IP_PACK:
+class TcpIpPacket:
     def __init__(self, source, host, ttl, source_port, destination_port,
                  seq=0, payload=''):
         self.source: bytes = socket.inet_aton(source)
