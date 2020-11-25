@@ -8,7 +8,7 @@ from trace.traceroute import TcpTraceroute
 
 
 @fixture()
-def tcp_traceroute():
+def tcp_traceroute()->TcpTraceroute:
     return TcpTraceroute("127.0.0.1")
 
 

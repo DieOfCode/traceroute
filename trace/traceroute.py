@@ -105,7 +105,7 @@ class Traceroute:
         address = self.recv_data(recv_socket)
         trace_results.append(self.get_data_for_record(address, send_time))
 
-    def get_name_and_address(self, address):
+    def get_name_and_address(self, address) -> (str, str):
         try:
             recv_host_name = socket.gethostbyaddr(str(address[0]))[0]
             recv_host_address = address[0]
@@ -120,7 +120,7 @@ class Traceroute:
         send_socket.sendto(bytes(self.packet_size),
                            (self.host, self.port))
 
-    def recv_data(self, recv_socket):
+    def recv_data(self, recv_socket) -> str:
         try:
             packet, address = recv_socket.recvfrom(1024)
             self.icmp_type = packet[20]
@@ -151,7 +151,7 @@ class TcpTraceroute(Traceroute):
         address = self.recv_data_tcp(recv_socket, send_socket)
         trace_results.append(self.get_data_for_record(address, send_time))
 
-    def recv_data_tcp(self, recv_socket, send_socket):
+    def recv_data_tcp(self, recv_socket, send_socket) -> str:
         try:
             packet, address = recv_socket.recvfrom(1024)
             self.icmp_type = packet[20]
@@ -164,7 +164,7 @@ class TcpTraceroute(Traceroute):
                 address = ("*",)
         return address
 
-    def get_tcp_status(self, send_socket):
+    def get_tcp_status(self, send_socket) -> str:
         tcp_data, address = send_socket.recvfrom(1024)
         tcp_header = struct.unpack("!HHLLBBHHH", tcp_data[20:40])
         try:

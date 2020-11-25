@@ -6,7 +6,7 @@ from trace.tcp_packet import TcpIpPacket
 
 
 @fixture
-def test_tcp_packet():
+def test_tcp_packet()->TcpIpPacket:
     return TcpIpPacket(source="127.0.0.1", ttl=1, source_port=80,
                        destination_port=80, host="google.com")
 
