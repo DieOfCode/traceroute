@@ -8,15 +8,27 @@ from trace.traceroute import TcpTraceroute
 
 
 @fixture()
-def tcp_traceroute()->TcpTraceroute:
+def tcp_traceroute() -> TcpTraceroute:
     return TcpTraceroute("127.0.0.1")
 
 
-@patch("struct.unpack", return_value=[0, 0, 0, 0, 0, 18])
-def test_get_tcp_status(test_unpack):
+@fixture()
+def tcp_traceroute_status():
     test_tcp_trace = TcpTraceroute("127.0.0.1")
-    print(test_tcp_trace.get_tcp_status(FakeSocket()))
-    assert test_tcp_trace.tcp_flag == 18
+    test_tcp_trace.get_tcp_status(FakeSocket(False))
+    return test_tcp_trace
+
+
+@patch("struct.unpack", return_value=[0, 0, 0, 0, 0, 18])
+def test_get_tcp_status_end(test_unpack, tcp_traceroute):
+    tcp_traceroute.get_tcp_status(FakeSocket(False))
+    assert tcp_traceroute.tcp_flag == 18
+
+
+@patch("struct.unpack", return_value=[0, 0, 0, 0, 0, 10])
+def test_get_tcp_status(test_unpack, tcp_traceroute):
+    tcp_traceroute.get_tcp_status(FakeSocket(False))
+    assert tcp_traceroute.tcp_flag == 0
 
 
 def test_tcp_is_end(tcp_traceroute):
@@ -32,6 +44,11 @@ def test_get_trace_result(tcp_traceroute):
     with patch("trace.traceroute.TcpTraceroute.recv_data_tcp") as test_recv:
         test_recv.return_value = "127.0.0.1"
         test_result = []
-        tcp_traceroute.get_trace_result(FakeSocket(), FakeSocket(), 10,
-                                        test_result)
+        tcp_traceroute.get_trace_result(FakeSocket(False), FakeSocket(False),
+                                        10, test_result)
         assert len(test_result) == 1
+
+
+@patch("struct.unpack", return_value=[0, 0, 0, 0, 0, 18])
+def test_recv_data_tcp(test_unpack, tcp_traceroute, ):
+    tcp_traceroute.recv_data_tcp(FakeSocket(True), FakeSocket(False))
