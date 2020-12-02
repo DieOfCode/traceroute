@@ -1,5 +1,6 @@
 [tool.coverage.run]
 source = ["trace"]
+omit = ["*/__main__.py"]
 
 [tool.coverage.report]
 show_missing = true

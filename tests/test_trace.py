@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
+from tests.fake_socket import FakeSocket
 from trace.result_message import ResultMessage
 from trace.traceroute import Traceroute
 
@@ -23,7 +24,12 @@ def set_up() -> Dict[int, namedtuple]:
 
 
 @pytest.fixture
-def trace_local() -> Dict[int, str]:
+@patch("trace.traceroute.Traceroute.create_sockets",
+       return_value=(FakeSocket(is_over=True, is_tcp=True),
+                     FakeSocket(is_over=True, is_tcp=True)))
+@patch("trace.traceroute.Traceroute.get_name_and_address",
+       return_value=("", ""))
+def trace_local(host, test) -> Dict[int, str]:
     test_trace = Traceroute(host="127.0.0.1")
     all_results = {}
     for result in test_trace.traceroute():
@@ -45,11 +51,12 @@ def set_up_for_test_end() -> Callable:
 
 def test_icmp_code(set_up):
     for element in set_up.values():
+        print(element)
         assert element.type_icmp == "TYPE:11"
 
 
 def test_local(trace_local):
-    assert list(trace_local.values())[0].icmp_type == 3
+    assert list(trace_local.values())[0].icmp_type == 0
 
 
 def test_is_end_false(set_up_for_test_end):
@@ -59,12 +66,16 @@ def test_is_end_false(set_up_for_test_end):
         assert a.is_end(a.create_trace()) is False
 
 
-def test_is_end_true(set_up_for_test_end):
+@patch("trace.traceroute.Traceroute.create_sockets",
+       return_value=(FakeSocket(is_over=True, is_tcp=False),
+                     FakeSocket(is_over=True, is_tcp=False)))
+def test_is_end_true(test_sockets,
+                     set_up_for_test_end):
     with patch("trace.traceroute.Traceroute.create_trace") as test_recv:
         test_recv.return_value = set_up_for_test_end(True)
         a = Traceroute(host="127.0.0.1")
-
-    assert a.is_end(a.create_trace()) is True
+        result = a.is_end(a.create_trace())
+    assert result is True
 
 
 def test_get_data_for_record():

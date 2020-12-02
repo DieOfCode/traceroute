@@ -107,6 +107,7 @@ class Traceroute:
 
     def get_name_and_address(self, address) -> (str, str):
         try:
+            print(address)
             recv_host_name = socket.gethostbyaddr(str(address[0]))[0]
             recv_host_address = address[0]
         except socket.error:
